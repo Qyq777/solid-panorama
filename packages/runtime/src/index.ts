@@ -59,7 +59,7 @@ export const {
 } = createRenderer<Panel>({
     // @ts-ignore
     createElement(type: string, props: any, parent?: Panel) {
-        const { id, snippet, vars, dialogVariables, text, style, ..._props } =
+        const { id, snippet, vars, dialogVariables, style, ..._props } =
             props;
         const styleIsString = typeof style === 'string';
         if (styleIsString) {
@@ -84,12 +84,10 @@ export const {
         if (dialogVariables) {
             setDialogVariables(el, dialogVariables, {});
         }
-        if (text) {
-            if (text[0] === '#') {
-                el.__solidText = text;
-                el.text = $.Localize(text, el);
-            } else {
-                el.text = text;
+        if (props.text) {
+            const lab = getLabelNode(el);
+            if (lab) {
+                lab.__solidText = props.text;
             }
         }
         return el;
@@ -98,9 +96,6 @@ export const {
     createTextNode(value: string, parent?: Panel) {
         if (typeof value !== 'string') {
             value = String(value);
-        }
-        if (value[0] === '#') {
-            value = $.Localize(value, parent);
         }
         const child = $.CreatePanel(
             'Label',
@@ -112,9 +107,7 @@ export const {
             }
         );
         child.SetDisableFocusOnMouseDown(true);
-        if (value[0] === '#') {
-            child.__solidText = value;
-        }
+        child.__solidText = value;
         return child;
     },
 
@@ -122,11 +115,7 @@ export const {
         if (!textNode || !textNode.IsValid()) {
             return;
         }
-        if (value[0] === '#') {
-            textNode.__solidText = value;
-            value = $.Localize(value, textNode);
-        }
-        textNode.text = value;
+        setText(textNode, value)
     },
 
     isTextNode(node: LabelPanel) {
@@ -199,12 +188,7 @@ export const {
         if (name === 'class' || name === 'className') {
             applyClassNames(node, value, prev || '');
         } else if (name === 'text') {
-            if (value[0] === '#') {
-                node.__solidText = value;
-                (node as LabelPanel).text = $.Localize(value, node);
-            } else {
-                (node as LabelPanel).text = value;
-            }
+            setText(node, value);
         } else if (name === 'src' && (node as ImagePanel).SetImage) {
             (node as ImagePanel).SetImage(value);
         } else if (name === 'classList') {
@@ -409,9 +393,6 @@ function setDialogVariables(
             node.SetDialogVariableTime(key, Math.floor(value.getTime() / 1000));
         }
     }
-    if (node.__solidText) {
-        (node as LabelPanel).text = $.Localize(node.__solidText, node);
-    }
 }
 
 function setAttributes(node: Panel, attrs: Record<string, string | number>) {
@@ -438,4 +419,34 @@ function setData(node: Panel, key: string, v: unknown) {
         });
     }
     (node.Data() as any)[key] = v;
+}
+
+function getLabelNode(node: Panel) {
+    let lab: LabelPanel | undefined;
+    if (node.paneltype == 'Label') {
+        lab = node as LabelPanel;
+    } else if (node.paneltype == 'TextButton') {
+        lab = node.GetChild(0) as LabelPanel;
+    } else if (node.paneltype == 'RadioButton') {
+        lab = node.GetChild(1) as LabelPanel;
+    }
+    return lab;
+}
+
+function setText(node: Panel, text: string) {
+    const lab = getLabelNode(node);
+    if (lab) {
+        if (lab.__solidText != text) {
+            lab.__solidText = text;
+            if (lab.html) {
+                if (text[0] === '#') {
+                    lab.text = $.Localize(text, node);
+                } else {
+                    lab.text = text;
+                }
+            } else {
+                lab.SetAlreadyLocalizedText(text);
+            }
+        }
+    }
 }
