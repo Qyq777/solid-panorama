@@ -59,8 +59,7 @@ export const {
 } = createRenderer<Panel>({
     // @ts-ignore
     createElement(type: string, props: any, parent?: Panel) {
-        const { id, snippet, vars, dialogVariables, style, ..._props } =
-            props;
+        const [{ id, snippet, vars, dialogVariables, style }, _props] = splitProps(props, ['id', 'snippet', 'vars', 'dialogVariables', 'style', 'children']);
         const styleIsString = typeof style === 'string';
         if (styleIsString) {
             props.style = style;
@@ -71,7 +70,9 @@ export const {
             id || '',
             _props
         ) as LabelPanel;
-        el.SetDisableFocusOnMouseDown(true);
+        if (type != 'TextEntry') {
+            el.SetDisableFocusOnMouseDown(true);
+        }
         if (!styleIsString) {
             applyStyles(el, style);
         }
@@ -94,6 +95,7 @@ export const {
     },
     // @ts-ignore
     createTextNode(value: string, parent?: Panel) {
+        return
         if (typeof value !== 'string') {
             value = String(value);
         }
