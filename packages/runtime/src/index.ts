@@ -69,7 +69,7 @@ export const {
                 type,
                 parent || $.GetContextPanel(),
                 id || '',
-                _props
+                { ..._props }
             ) as LabelPanel;
             if (type != 'TextEntry') {
                 el.SetDisableFocusOnMouseDown(true);
