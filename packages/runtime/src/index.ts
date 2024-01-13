@@ -59,39 +59,41 @@ export const {
 } = createRenderer<Panel>({
     // @ts-ignore
     createElement(type: string, props: any, parent?: Panel) {
-        const [{ id, snippet, vars, dialogVariables, style }, _props] = splitProps(props, ['id', 'snippet', 'vars', 'dialogVariables', 'style', 'children']);
-        const styleIsString = typeof style === 'string';
-        if (styleIsString) {
-            props.style = style;
-        }
-        const el = $.CreatePanel(
-            type,
-            parent || $.GetContextPanel(),
-            id || '',
-            _props
-        ) as LabelPanel;
-        if (type != 'TextEntry') {
-            el.SetDisableFocusOnMouseDown(true);
-        }
-        if (!styleIsString) {
-            applyStyles(el, style);
-        }
-        if (snippet) {
-            el.BLoadLayoutSnippet(snippet);
-        }
-        if (vars) {
-            setDialogVariables(el, vars, {});
-        }
-        if (dialogVariables) {
-            setDialogVariables(el, dialogVariables, {});
-        }
-        if (props.text) {
-            const lab = getLabelNode(el);
-            if (lab) {
-                lab.__solidText = props.text;
+        return untrack(() => {
+            const [{ id, snippet, vars, dialogVariables, style }, _props] = splitProps(props, ['id', 'snippet', 'vars', 'dialogVariables', 'style', 'children']);
+            const styleIsString = typeof style === 'string';
+            if (styleIsString) {
+                props.style = style;
             }
-        }
-        return el;
+            const el = $.CreatePanel(
+                type,
+                parent || $.GetContextPanel(),
+                id || '',
+                _props
+            ) as LabelPanel;
+            if (type != 'TextEntry') {
+                el.SetDisableFocusOnMouseDown(true);
+            }
+            if (!styleIsString) {
+                applyStyles(el, style);
+            }
+            if (snippet) {
+                el.BLoadLayoutSnippet(snippet);
+            }
+            if (vars) {
+                setDialogVariables(el, vars, {});
+            }
+            if (dialogVariables) {
+                setDialogVariables(el, dialogVariables, {});
+            }
+            if (props.text) {
+                const lab = getLabelNode(el);
+                if (lab) {
+                    lab.__solidText = props.text;
+                }
+            }
+            return el;
+        })
     },
     // @ts-ignore
     createTextNode(value: string, parent?: Panel) {

@@ -49,6 +49,9 @@ declare interface PanelAttributes<T extends PanelBase = Panel> {
 
     onload?: string | EventHandler<T>;
     onfocus?: string | EventHandler<T>;
+    ondescendantfocus?: string | EventHandler<T>;
+    onblur?: string | EventHandler<T>;
+    ondescendantblur?: string | EventHandler<T>;
     onactivate?: string | EventHandler<T>;
     onmouseactivate?: string | EventHandler<T>;
     ondblclick?: string | EventHandler<T>;
@@ -261,7 +264,7 @@ declare interface CountdownAttributes extends PanelAttributes<CountdownPanel> {
 }
 
 declare interface TextButtonAttributes
-    extends LabelLikeAttributes<TextButton> {}
+    extends LabelLikeAttributes<TextButton> { }
 
 declare interface ToggleButtonAttributes
     extends LabelLikeAttributes<ToggleButton> {
@@ -374,4 +377,4 @@ declare interface CustomLayoutPanelAttributes extends PanelAttributes {
     layout: string;
 }
 
-declare interface DOTAPortraitAttributes extends PanelAttributes {}
+declare interface DOTAPortraitAttributes extends PanelAttributes { }
