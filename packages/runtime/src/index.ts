@@ -209,21 +209,23 @@ export const {
             node.SetDraggable(value === true);
         } else if (name === 'acceptsfocus') {
             node.SetAcceptsFocus(value === true);
-        } else if (name === 'tooltip_text') {
-            setTooltipText(node, value);
-        } else if (name === 'custom_tooltip') {
-            setCustomTooltip(node, value);
-        } else if (name === 'custom_tooltip_params') {
-            setCustomTooltipParams(node, value);
-        } else if (
-            name === 'onDragStart' ||
-            name === 'onDragEnd' ||
-            name === 'onDragEnter' ||
-            name === 'onDragDrop' ||
-            name === 'onDragLeave'
-        ) {
-            setDragEvent(node, name, value);
-        } else if (name.startsWith('data-')) {
+        }
+        // else if (name === 'tooltip_text') {
+        //     setTooltipText(node, value);
+        // } else if (name === 'custom_tooltip') {
+        //     setCustomTooltip(node, value);
+        // } else if (name === 'custom_tooltip_params') {
+        //     setCustomTooltipParams(node, value);
+        // } else if (
+        //     name === 'onDragStart' ||
+        //     name === 'onDragEnd' ||
+        //     name === 'onDragEnter' ||
+        //     name === 'onDragDrop' ||
+        //     name === 'onDragLeave'
+        // ) {
+        //     setDragEvent(node, name, value);
+        // } 
+        else if (name.startsWith('data-')) {
             setData(node, name.slice(5), value);
         } else if (name.startsWith('on')) {
             setPanelEvent(node, name as PanelEvent, value);

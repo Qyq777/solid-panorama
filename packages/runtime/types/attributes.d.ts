@@ -40,38 +40,38 @@ declare interface PanelAttributes<T extends PanelBase = Panel> {
     ref?: T | ((element: T) => void);
 
     // tooltip
-    tooltip_text?: string;
+    // tooltip_text?: string;
     /**
      * [tooltip name, xml file path]
      */
-    custom_tooltip?: [string, string];
-    custom_tooltip_params?: Record<string, string | number>;
+    // custom_tooltip?: [string, string];
+    // custom_tooltip_params?: Record<string, string | number>;
 
-    onload?: string | EventHandler<T>;
-    onfocus?: string | EventHandler<T>;
-    ondescendantfocus?: string | EventHandler<T>;
-    onblur?: string | EventHandler<T>;
-    ondescendantblur?: string | EventHandler<T>;
-    onactivate?: string | EventHandler<T>;
-    onmouseactivate?: string | EventHandler<T>;
-    ondblclick?: string | EventHandler<T>;
-    oncontextmenu?: string | EventHandler<T>;
-    onmouseover?: string | EventHandler<T>;
-    onmouseout?: string | EventHandler<T>;
-    onmovedown?: string | EventHandler<T>;
-    onmoveleft?: string | EventHandler<T>;
-    onmoveright?: string | EventHandler<T>;
-    onmoveup?: string | EventHandler<T>;
-    oncancel?: string | EventHandler<T>;
-    ontabforward?: string | EventHandler<T>;
-    ontooltiploaded?: string | EventHandler<T>;
+    onload?: EventHandler<T>;
+    onfocus?: EventHandler<T>;
+    ondescendantfocus?: EventHandler<T>;
+    onblur?: EventHandler<T>;
+    ondescendantblur?: EventHandler<T>;
+    onactivate?: EventHandler<T>;
+    onmouseactivate?: EventHandler<T>;
+    ondblclick?: EventHandler<T>;
+    oncontextmenu?: EventHandler<T>;
+    onmouseover?: EventHandler<T>;
+    onmouseout?: EventHandler<T>;
+    onmovedown?: EventHandler<T>;
+    onmoveleft?: EventHandler<T>;
+    onmoveright?: EventHandler<T>;
+    onmoveup?: EventHandler<T>;
+    oncancel?: EventHandler<T>;
+    ontabforward?: EventHandler<T>;
+    ontooltiploaded?: EventHandler<T>;
 
     // custom events
-    onDragStart?: (source: Panel, dragCallbacks: IDragCallbacks) => void;
-    onDragEnd?: (source: Panel, draggedPanel: Panel) => void;
-    onDragEnter?: (source: Panel, draggedPanel: Panel) => void;
-    onDragDrop?: (source: Panel, draggedPanel: Panel) => void;
-    onDragLeave?: (source: Panel, draggedPanel: Panel) => void;
+    // onDragStart?: (source: Panel, dragCallbacks: IDragCallbacks) => void;
+    // onDragEnd?: (source: Panel, draggedPanel: Panel) => void;
+    // onDragEnter?: (source: Panel, draggedPanel: Panel) => void;
+    // onDragDrop?: (source: Panel, draggedPanel: Panel) => void;
+    // onDragLeave?: (source: Panel, draggedPanel: Panel) => void;
 }
 
 declare interface IDragCallbacks {
