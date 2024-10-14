@@ -65,7 +65,16 @@ export const {
     // @ts-ignore
     createElement(type: string, props: any, parent?: Panel) {
         return untrack(() => {
-            const [{ id, snippet, vars, dialogVariables, style }, _props] = splitProps(props, ['id', 'snippet', 'vars', 'dialogVariables', 'style', 'children']);
+            const [{
+                id,
+                snippet,
+                vars,
+                dialogVariables,
+                style,
+                visible,
+                enabled,
+                checked,
+            }, _props] = splitProps(props, ['id', 'snippet', 'vars', 'dialogVariables', 'style', 'visible', 'enabled', 'checked', 'children']);
             const styleIsString = typeof style === 'string';
             if (styleIsString) {
                 props.style = style;
@@ -76,6 +85,15 @@ export const {
                 id || '',
                 { ..._props }
             ) as LabelPanel;
+            if (typeof visible === 'boolean') {
+                el.visible = visible;
+            }
+            if (typeof enabled === 'boolean') {
+                el.enabled = enabled;
+            }
+            if (typeof checked === 'boolean') {
+                el.checked = checked;
+            }
             if (type != 'TextEntry') {
                 el.SetDisableFocusOnMouseDown(true);
             }
@@ -355,7 +373,7 @@ function applyStyles(
             }
         }
         // @ts-ignore
-        node.style[k] = styles[k];
+        node.style[k] = styles[k] === undefined ? null : styles[k];
     }
 }
 
