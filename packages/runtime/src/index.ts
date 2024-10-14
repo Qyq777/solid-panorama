@@ -37,6 +37,11 @@ const nodeTrash = (function () {
     while (root.GetParent()) {
         root = root.GetParent()!;
     }
+    let trashing = () => {
+        nodeTrash.RemoveAndDeleteChildren()
+        $.Schedule(0, trashing)
+    }
+    $.Schedule(0, trashing)
     return $.CreatePanel('Panel', root, '', {
         style: 'visibility: collapse;'
     });
@@ -144,7 +149,6 @@ export const {
             return;
         }
         node.SetParent(nodeTrash);
-        node.DeleteAsync(0);
     },
 
     getParentNode(node: Panel) {
@@ -376,27 +380,31 @@ function setDialogVariables(
     for (const key in prev) {
         if (!vars[key]) {
             const value = prev[key];
-            if (typeof value === 'string') {
-                node.SetDialogVariable(key, `[!s:${key}]`);
-            } else if (typeof value === 'number') {
-                node.SetDialogVariableInt(key, NaN);
-            } else {
-                node.SetDialogVariableTime(key, PANORAMA_INVALID_DATE);
+            if (value != undefined) {
+                if (typeof value === 'string') {
+                    node.SetDialogVariable(key, `[!s:${key}]`);
+                } else if (typeof value === 'number') {
+                    node.SetDialogVariableInt(key, NaN);
+                } else {
+                    node.SetDialogVariableTime(key, PANORAMA_INVALID_DATE);
+                }
             }
         }
     }
     for (const key in vars) {
         const value = vars[key];
-        if (typeof value === 'string') {
-            if (value[0] === '#') {
-                node.SetDialogVariableLocString(key, value);
+        if (value != undefined) {
+            if (typeof value === 'string') {
+                if (value[0] === '#') {
+                    node.SetDialogVariableLocString(key, value);
+                } else {
+                    node.SetDialogVariable(key, value);
+                }
+            } else if (typeof value === 'number') {
+                node.SetDialogVariableInt(key, value);
             } else {
-                node.SetDialogVariable(key, value);
+                node.SetDialogVariableTime(key, Math.floor(value.getTime() / 1000));
             }
-        } else if (typeof value === 'number') {
-            node.SetDialogVariableInt(key, value);
-        } else {
-            node.SetDialogVariableTime(key, Math.floor(value.getTime() / 1000));
         }
     }
 }
