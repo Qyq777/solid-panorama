@@ -382,8 +382,16 @@ function setPanelEvent(node: Panel, event: PanelEvent, handle: any) {
         node.ClearPanelEvent(event);
         return;
     }
+    let stack = new Error().stack;
     node.SetPanelEvent(event, function () {
-        handle(node);
+        try {
+            handle(node);
+        } catch (error) {
+            if (typeof error == 'string') {
+                error += '\n' + stack
+            }
+            throw error
+        }
     });
 }
 
