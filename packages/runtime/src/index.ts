@@ -74,10 +74,14 @@ export const {
                 visible,
                 enabled,
                 checked,
-            }, _props] = splitProps(props, ['id', 'snippet', 'vars', 'dialogVariables', 'style', 'visible', 'enabled', 'checked', 'children']);
+                type: _type,
+            }, _props] = splitProps(props, ['id', 'snippet', 'vars', 'dialogVariables', 'style', 'visible', 'enabled', 'checked', 'children', 'type']);
             const styleIsString = typeof style === 'string';
             if (styleIsString) {
                 props.style = style;
+            }
+            if (type === 'GenericPanel') {
+                type = _type;
             }
             const el = $.CreatePanel(
                 type,
@@ -212,7 +216,7 @@ export const {
             return;
         }
         if (name === 'class' || name === 'className') {
-            applyClassNames(node, value, prev || '');
+            applyClassNames(node, value || '', prev || '');
         } else if (name === 'text') {
             setText(node, value);
         } else if (name === 'src' && (node as ImagePanel).SetImage) {
@@ -338,9 +342,10 @@ function applyClassNames(node: Panel, names: string, prev: string) {
 
 function updateClassList(
     node: Panel,
-    state: Record<string, boolean>,
+    state: Record<string, boolean> | undefined,
     prev?: Record<string, boolean>
 ) {
+    state = state || {};
     if (prev) {
         for (const k in prev) {
             if (state[k] === undefined) {
@@ -355,9 +360,10 @@ function updateClassList(
 
 function applyStyles(
     node: Panel,
-    styles: Record<string, string | number>,
+    styles: Record<string, string | number> | undefined,
     prev?: Record<string, string | number>
 ) {
+    styles = styles || {};
     prev = prev || {};
     for (const k in prev) {
         if (!hasOwn.call(styles, k)) {
